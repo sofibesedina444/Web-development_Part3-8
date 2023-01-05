@@ -14,14 +14,14 @@ public class IngredientController {
         this.ingredientService = ingredientService;
     }
 
-    @PostMapping("/create")
+    @PostMapping
     @ResponseBody
     public ResponseEntity createIngredient(@RequestBody Ingredient ingredient) {
         Ingredient createIngredient = ingredientService.addIngredient(ingredient);
         return ResponseEntity.ok(createIngredient);
     }
 
-    @GetMapping("/get/{ingredientID}")
+    @GetMapping("/ingredientID")
     @ResponseBody
     public ResponseEntity getIngredient(@PathVariable int ingredientID) {
         Ingredient ingredient = ingredientService.getIngredient(ingredientID);
