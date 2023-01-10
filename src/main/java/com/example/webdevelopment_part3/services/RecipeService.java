@@ -5,6 +5,13 @@ import com.example.webdevelopment_part3.model.Recipe;
 import java.util.Map;
 
 public interface RecipeService {
-    Recipe addRecipe(Recipe recipe);
+    Integer addRecipe(Recipe recipe);
+
+    Recipe putRecipe(int id, Recipe recipe);
+
+    boolean deleteRecipe(int id);
+
     Recipe getRecipe(int id);
+
+    void getAllRecipes();
 }

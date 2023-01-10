@@ -16,18 +16,44 @@ public class IngredientController {
 
     @PostMapping
     @ResponseBody
-    public ResponseEntity createIngredient(@RequestBody Ingredient ingredient) {
-        Ingredient createIngredient = ingredientService.addIngredient(ingredient);
+    public ResponseEntity<Integer> createIngredient(@RequestBody Ingredient ingredient) {
+        Integer createIngredient = ingredientService.addIngredient(ingredient);
         return ResponseEntity.ok(createIngredient);
     }
 
-    @GetMapping("/ingredientID")
+    @PutMapping("/{ingredientID}")
     @ResponseBody
-    public ResponseEntity getIngredient(@PathVariable int ingredientID) {
-        Ingredient ingredient = ingredientService.getIngredient(ingredientID);
-        if(ingredient == null) {
+    public ResponseEntity<Ingredient> editIngredient(@PathVariable int ingredientID, @RequestBody Ingredient ingredient) {
+        Ingredient editIngredient = ingredientService.putIngredient(ingredientID, ingredient);
+        if (ingredient == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(ingredient);
+        return ResponseEntity.ok(editIngredient);
+    }
+
+    @DeleteMapping("/{ingredientID}")
+    @ResponseBody
+    public ResponseEntity<Void> deleteIngredient(@PathVariable int ingredientID) {
+        if (ingredientService.deleteIngredient(ingredientID)) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/{ingredientID}")
+    @ResponseBody
+    public ResponseEntity<Ingredient> getIngredient(@PathVariable int ingredientID) {
+        Ingredient getIngredient = ingredientService.getIngredient(ingredientID);
+        if (getIngredient == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(getIngredient);
+    }
+
+    @GetMapping
+    @ResponseBody
+    public ResponseEntity<Void> getAllIngredients() {
+        ingredientService.getAllIngredients();
+        return ResponseEntity.ok().build();
     }
 }

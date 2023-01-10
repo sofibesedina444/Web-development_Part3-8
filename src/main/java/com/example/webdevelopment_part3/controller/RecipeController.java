@@ -16,18 +16,44 @@ public class RecipeController {
 
     @PostMapping
     @ResponseBody
-    public ResponseEntity createRecipe(@RequestBody Recipe recipe) {
-        Recipe createRecipe = recipeService.addRecipe(recipe);
+    public ResponseEntity<Integer> createRecipe(@RequestBody Recipe recipe) {
+        Integer createRecipe = recipeService.addRecipe(recipe);
         return ResponseEntity.ok(createRecipe);
     }
 
-    @GetMapping("/recipeID")
+    @PutMapping("/{recipeID}")
     @ResponseBody
-    public ResponseEntity getRecipe(@PathVariable int recipeID) {
-        Recipe recipe = recipeService.getRecipe(recipeID);
-        if(recipe == null) {
+    public ResponseEntity<Recipe> editRecipe(@PathVariable int recipeID, @RequestBody Recipe recipe) {
+        Recipe editRecipe = recipeService.putRecipe(recipeID, recipe);
+        if (recipe == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(recipe);
+        return ResponseEntity.ok(editRecipe);
+    }
+
+    @DeleteMapping("/{recipeID}")
+    @ResponseBody
+    public ResponseEntity<Void> deleteRecipe(@PathVariable int recipeID) {
+        if (recipeService.deleteRecipe(recipeID)) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/{recipeID}")
+    @ResponseBody
+    public ResponseEntity<Recipe> getRecipe(@PathVariable int recipeID) {
+        Recipe getRecipe = recipeService.getRecipe(recipeID);
+        if(getRecipe == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(getRecipe);
+    }
+
+    @GetMapping
+    @ResponseBody
+    public ResponseEntity<Void> getAllRecipes() {
+        recipeService.getAllRecipes();
+        return ResponseEntity.ok().build();
     }
 }
