@@ -10,12 +10,13 @@ import java.util.TreeMap;
 @Service
 public class RecipeServiceImpl implements RecipeService {
     private static final Map<Integer, Recipe> recipes = new TreeMap<>();
-    private static int recipeID = 1;
+    private static int recipeID = 0;
 
     @Override
     public Integer addRecipe(Recipe recipe) {
-        recipes.putIfAbsent(recipeID, recipe);
-        return recipeID++;
+        Integer newId = ++recipeID;
+        recipes.putIfAbsent(newId, recipe);
+        return newId;
     }
 
     @Override

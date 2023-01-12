@@ -10,12 +10,13 @@ import java.util.TreeMap;
 @Service
 public class IngredientServiceImpl implements IngredientService {
     private static final Map<Integer, Ingredient> ingredients = new TreeMap<>();
-    private static Integer ingredientID = 1;
+    private static Integer ingredientID = 0;
 
     @Override
     public Integer addIngredient(Ingredient ingredient) {
-        ingredients.putIfAbsent(ingredientID, ingredient);
-        return ingredientID++;
+        Integer newId = ++ingredientID;
+        ingredients.putIfAbsent(newId, ingredient);
+        return newId;
     }
 
     @Override

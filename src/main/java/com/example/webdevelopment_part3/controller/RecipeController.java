@@ -32,6 +32,12 @@ public class RecipeController {
                     @ArraySchema(schema =
                     @Schema(implementation = Ingredient.class)))
             }
+            ),
+            @ApiResponse(responseCode = "400", description = "Рецепт не создан", content = {
+                    @Content(mediaType = "application/json", array =
+                    @ArraySchema(schema =
+                    @Schema(implementation = Ingredient.class)))
+            }
             )
     }
     )
@@ -45,6 +51,12 @@ public class RecipeController {
     @Operation(summary = "Редактирование добавленного рецепта", description = "Поиск рецепта по id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Рецепт изменен", content = {
+                    @Content(mediaType = "application/json", array =
+                    @ArraySchema(schema =
+                    @Schema(implementation = Ingredient.class)))
+            }
+            ),
+            @ApiResponse(responseCode = "400", description = "Рецепт не изменен", content = {
                     @Content(mediaType = "application/json", array =
                     @ArraySchema(schema =
                     @Schema(implementation = Ingredient.class)))
@@ -69,6 +81,12 @@ public class RecipeController {
                     @ArraySchema(schema =
                     @Schema(implementation = Ingredient.class)))
             }
+            ),
+            @ApiResponse(responseCode = "400", description = "Рецепт не удален", content = {
+                    @Content(mediaType = "application/json", array =
+                    @ArraySchema(schema =
+                    @Schema(implementation = Ingredient.class)))
+            }
             )
     }
     )
@@ -84,6 +102,12 @@ public class RecipeController {
     @Operation(summary = "Поиск добавленного в список рецепта", description = "Поиск рецепта по id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Рецепт найден", content = {
+                    @Content(mediaType = "application/json", array =
+                    @ArraySchema(schema =
+                    @Schema(implementation = Ingredient.class)))
+            }
+            ),
+            @ApiResponse(responseCode = "400", description = "Рецепт не найден", content = {
                     @Content(mediaType = "application/json", array =
                     @ArraySchema(schema =
                     @Schema(implementation = Ingredient.class)))
@@ -104,6 +128,12 @@ public class RecipeController {
     @Operation(summary = "Получение всех рецептов из списка")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Рецепты найдены", content = {
+                    @Content(mediaType = "application/json", array =
+                    @ArraySchema(schema =
+                    @Schema(implementation = Ingredient.class)))
+            }
+            ),
+            @ApiResponse(responseCode = "400", description = "Рецепты не найдены", content = {
                     @Content(mediaType = "application/json", array =
                     @ArraySchema(schema =
                     @Schema(implementation = Ingredient.class)))
