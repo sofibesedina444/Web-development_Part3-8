@@ -4,6 +4,7 @@ import com.example.webdevelopment_part3.services.FileService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -39,7 +40,8 @@ public class FileServiceImpl implements FileService {
         }
     }
 
-    private boolean clearDataFileIngredient() {
+    @Override
+    public boolean clearDataFileIngredient() {
         try {
             Path path = Path.of(dataFileIngredientPath, dataFileIngredientName);
             Files.deleteIfExists(path);
@@ -50,6 +52,12 @@ public class FileServiceImpl implements FileService {
             return false;
         }
     }
+
+    @Override
+    public File getDataFileIngredient() {
+        return new File(dataFileIngredientPath + "/" + dataFileIngredientName);
+    }
+
     @Override
     public boolean saveToFileRecipe(String json) {
         try {
@@ -70,7 +78,8 @@ public class FileServiceImpl implements FileService {
         }
     }
 
-    private boolean clearDataFileRecipe() {
+    @Override
+    public boolean clearDataFileRecipe() {
         try {
             Path path = Path.of(dataFileRecipePath, dataFileRecipeName);
             Files.deleteIfExists(path);
@@ -80,5 +89,10 @@ public class FileServiceImpl implements FileService {
             e.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public File getDataFileRecipe() {
+        return new File(dataFileRecipePath + "/" + dataFileRecipeName);
     }
 }
