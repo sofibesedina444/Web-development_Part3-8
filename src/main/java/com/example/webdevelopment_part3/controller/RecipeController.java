@@ -15,6 +15,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RequestMapping("/recipe")
 @RestController
 @Tag(name = "Рецепт", description = "Операции CRUD и скачивание файла txt")
@@ -143,36 +145,35 @@ public class RecipeController {
             )
     }
     )
-    public ResponseEntity<Void> getAllRecipes() {
-        recipeService.getAllRecipes();
-        return ResponseEntity.ok().build();
+    public Map<Integer, Recipe> getAllRecipes() {
+        return recipeService.getAllRecipes();
     }
 
     @GetMapping("/downloadRecipe")
     @Operation(summary = "Скачивание файла со списком рецептов в формате txt")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Запрос выполнился", content = {
-                    @Content(mediaType = "application/json", array =
+                    @Content(mediaType = "txt", array =
                     @ArraySchema(schema =
                     @Schema(implementation = Ingredient.class)))
             }
             ),
             @ApiResponse(responseCode = "400", description = "Ошибка в параметрах запроса", content = {
-                    @Content(mediaType = "application/json", array =
+                    @Content(mediaType = "txt", array =
                     @ArraySchema(schema =
                     @Schema(implementation = Ingredient.class)))
             }
             ),
             @ApiResponse(responseCode = "404", description = "URL неверный или такого действия нет в веб-приложении",
                     content = {
-                            @Content(mediaType = "application/json", array =
+                            @Content(mediaType = "txt", array =
                             @ArraySchema(schema =
                             @Schema(implementation = Ingredient.class)))
                     }
             ),
             @ApiResponse(responseCode = "500", description = "Ошибка на сервере",
                     content = {
-                            @Content(mediaType = "application/json", array =
+                            @Content(mediaType = "txt", array =
                             @ArraySchema(schema =
                             @Schema(implementation = Ingredient.class)))
                     }

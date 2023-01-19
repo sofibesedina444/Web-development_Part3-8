@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -56,17 +57,17 @@ public class RecipeServiceImpl implements RecipeService {
         return recipes.get(recipeID);
     }
 
+    @Nullable
     @Override
-    public void getAllRecipes() {
-        for(Map.Entry<Integer, Recipe> entry : recipes.entrySet()) {
-            System.out.printf("%s=>%s\n", entry.getKey(), entry.getValue());
-        }
+    public Map<Integer, Recipe> getAllRecipes() {
+        return new HashMap<>(recipes);
     }
+
     @Nullable
     @Override
     public byte[] downloadDataFileRecipe() {
         StringBuilder stringBuilder = new StringBuilder();
-        for(Recipe recipe: recipes.values()) {
+        for (Recipe recipe : recipes.values()) {
             stringBuilder.append(recipe).append("\n").append(" ").append("\n");
         }
         return stringBuilder.toString().getBytes(StandardCharsets.UTF_8);
@@ -90,6 +91,7 @@ public class RecipeServiceImpl implements RecipeService {
             throw new RuntimeException(e);
         }
     }
+
     @PostConstruct
     private void init() {
         readFromFileRecipe();

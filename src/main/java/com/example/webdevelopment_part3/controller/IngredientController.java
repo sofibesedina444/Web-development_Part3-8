@@ -1,6 +1,7 @@
 package com.example.webdevelopment_part3.controller;
 
 import com.example.webdevelopment_part3.model.Ingredient;
+import com.example.webdevelopment_part3.model.Recipe;
 import com.example.webdevelopment_part3.services.IngredientService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -13,6 +14,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RequestMapping("/ingredient")
 @RestController
@@ -142,36 +145,35 @@ public class IngredientController {
             )
     }
     )
-    public ResponseEntity<Void> getAllIngredients() {
-        ingredientService.getAllIngredients();
-        return ResponseEntity.ok().build();
+    public Map<Integer, Ingredient> getAllIngredients() {
+        return ingredientService.getAllIngredients();
     }
 
     @GetMapping("/downloadIngredient")
     @Operation(summary = "Скачивание файла со списком ингредиентов в формате txt")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Запрос выполнился", content = {
-                    @Content(mediaType = "application/json", array =
+                    @Content(mediaType = "txt", array =
                     @ArraySchema(schema =
                     @Schema(implementation = Ingredient.class)))
             }
             ),
             @ApiResponse(responseCode = "400", description = "Ошибка в параметрах запроса", content = {
-                    @Content(mediaType = "application/json", array =
+                    @Content(mediaType = "txt", array =
                     @ArraySchema(schema =
                     @Schema(implementation = Ingredient.class)))
             }
             ),
             @ApiResponse(responseCode = "404", description = "URL неверный или такого действия нет в веб-приложении",
                     content = {
-                            @Content(mediaType = "application/json", array =
+                            @Content(mediaType = "txt", array =
                             @ArraySchema(schema =
                             @Schema(implementation = Ingredient.class)))
                     }
             ),
             @ApiResponse(responseCode = "500", description = "Ошибка на сервере",
                     content = {
-                            @Content(mediaType = "application/json", array =
+                            @Content(mediaType = "txt", array =
                             @ArraySchema(schema =
                             @Schema(implementation = Ingredient.class)))
                     }

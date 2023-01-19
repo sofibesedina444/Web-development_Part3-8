@@ -1,6 +1,7 @@
 package com.example.webdevelopment_part3.services.impl;
 
 import com.example.webdevelopment_part3.model.Ingredient;
+import com.example.webdevelopment_part3.model.Recipe;
 import com.example.webdevelopment_part3.services.FileService;
 import com.example.webdevelopment_part3.services.IngredientService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -56,17 +58,17 @@ public class IngredientServiceImpl implements IngredientService {
         return ingredients.get(ingredientID);
     }
 
+    @Nullable
     @Override
-    public void getAllIngredients() {
-        for (Map.Entry<Integer, Ingredient> entry : ingredients.entrySet()) {
-            System.out.printf("%s=>%s\n", entry.getKey(), entry.getValue());
-        }
+    public Map<Integer, Ingredient> getAllIngredients() {
+        return new HashMap<>(ingredients);
     }
+
     @Nullable
     @Override
     public byte[] downloadDataFileIngredient() {
         StringBuilder stringBuilder = new StringBuilder();
-        for(Ingredient ingredient: ingredients.values()) {
+        for (Ingredient ingredient : ingredients.values()) {
             stringBuilder.append(ingredient).append("\n").append(" ").append("\n");
         }
         return stringBuilder.toString().getBytes(StandardCharsets.UTF_8);

@@ -1,6 +1,8 @@
 package com.example.webdevelopment_part3.services;
 import com.example.webdevelopment_part3.model.Ingredient;
 
+import java.util.Map;
+
 public interface IngredientService {
     Integer addIngredient (Ingredient ingredient);
 
@@ -10,7 +12,7 @@ public interface IngredientService {
 
     Ingredient getIngredient (int id);
 
-    void getAllIngredients();
+    Map<Integer, Ingredient> getAllIngredients();
 
     byte[] downloadDataFileIngredient();
 }

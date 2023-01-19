@@ -119,7 +119,7 @@ public class FileController {
     }
 
     @GetMapping("/exportRecipe")
-    @Operation(summary = "Скачивание файла со списком рецептов")
+    @Operation(summary = "Скачивание файла со списком рецептов в формате json")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Запрос выполнился", content = {
                     @Content(mediaType = "application/json", array =
@@ -154,7 +154,7 @@ public class FileController {
         if (file.exists()) {
             InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
             return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).contentLength(file.length())
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"IngredientLog.json\"")
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"RecipeLog.json\"")
                     .body(resource);
         } else {
             return ResponseEntity.noContent().build();
