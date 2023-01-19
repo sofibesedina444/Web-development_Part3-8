@@ -9,12 +9,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/ingredient")
 @RestController
-@Tag(name = "Ингридиент", description = "Операции CRUD")
+@Tag(name = "Ингредиент", description = "Операции CRUD и скачивание файла txt")
 public class IngredientController {
     private final IngredientService ingredientService;
 
@@ -24,15 +26,15 @@ public class IngredientController {
 
     @PostMapping
     @ResponseBody
-    @Operation(summary = "Добавление ингридиента в список")
+    @Operation(summary = "Добавление ингредиента в список")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Ингридиент создан", content = {
+            @ApiResponse(responseCode = "200", description = "Ингредиент создан", content = {
                     @Content(mediaType = "application/json", array =
                     @ArraySchema(schema =
                     @Schema(implementation = Ingredient.class)))
             }
             ),
-            @ApiResponse(responseCode = "400", description = "Ингридиент не создан", content = {
+            @ApiResponse(responseCode = "400", description = "Ингредиент не создан", content = {
                     @Content(mediaType = "application/json", array =
                     @ArraySchema(schema =
                     @Schema(implementation = Ingredient.class)))
@@ -47,15 +49,15 @@ public class IngredientController {
 
     @PutMapping("/{ingredientID}")
     @ResponseBody
-    @Operation(summary = "Редактирование добавленного ингридиента", description = "Поиск ингридиента по id")
+    @Operation(summary = "Редактирование добавленного ингредиента", description = "Поиск ингредиента по id")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Ингридиент изменен", content = {
+            @ApiResponse(responseCode = "200", description = "Ингредиент изменен", content = {
                     @Content(mediaType = "application/json", array =
                     @ArraySchema(schema =
                     @Schema(implementation = Ingredient.class)))
             }
             ),
-            @ApiResponse(responseCode = "400", description = "Ингридиент не изменен", content = {
+            @ApiResponse(responseCode = "400", description = "Ингредиент не изменен", content = {
                     @Content(mediaType = "application/json", array =
                     @ArraySchema(schema =
                     @Schema(implementation = Ingredient.class)))
@@ -73,15 +75,15 @@ public class IngredientController {
 
     @DeleteMapping("/{ingredientID}")
     @ResponseBody
-    @Operation(summary = "Удаление добавленного ингридиента из списка", description = "Поиск ингридиента по id")
+    @Operation(summary = "Удаление добавленного ингредиента из списка", description = "Поиск ингредиента по id")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Ингридиент удален", content = {
+            @ApiResponse(responseCode = "200", description = "Ингредиент удален", content = {
                     @Content(mediaType = "application/json", array =
                     @ArraySchema(schema =
                     @Schema(implementation = Ingredient.class)))
             }
             ),
-            @ApiResponse(responseCode = "400", description = "Ингридиент не удален", content = {
+            @ApiResponse(responseCode = "400", description = "Ингредиент не удален", content = {
                     @Content(mediaType = "application/json", array =
                     @ArraySchema(schema =
                     @Schema(implementation = Ingredient.class)))
@@ -98,15 +100,15 @@ public class IngredientController {
 
     @GetMapping("/{ingredientID}")
     @ResponseBody
-    @Operation(summary = "Поиск добавленного в список ингридиента", description = "Поиск ингридиента по id")
+    @Operation(summary = "Поиск добавленного в список ингредиента", description = "Поиск ингредиента по id")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Ингридиент найден", content = {
+            @ApiResponse(responseCode = "200", description = "Ингредиент найден", content = {
                     @Content(mediaType = "application/json", array =
                     @ArraySchema(schema =
                     @Schema(implementation = Ingredient.class)))
             }
             ),
-            @ApiResponse(responseCode = "400", description = "Ингридиент не найден", content = {
+            @ApiResponse(responseCode = "400", description = "Ингредиент не найден", content = {
                     @Content(mediaType = "application/json", array =
                     @ArraySchema(schema =
                     @Schema(implementation = Ingredient.class)))
@@ -124,15 +126,15 @@ public class IngredientController {
 
     @GetMapping
     @ResponseBody
-    @Operation(summary = "Получение всех ингридиентов из списка")
+    @Operation(summary = "Получение всех ингредиентов из списка")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Ингридиенты найдены", content = {
+            @ApiResponse(responseCode = "200", description = "Ингредиенты найдены", content = {
                     @Content(mediaType = "application/json", array =
                     @ArraySchema(schema =
                     @Schema(implementation = Ingredient.class)))
             }
             ),
-            @ApiResponse(responseCode = "400", description = "Ингридиенты не найдены", content = {
+            @ApiResponse(responseCode = "400", description = "Ингридеенты не найдены", content = {
                     @Content(mediaType = "application/json", array =
                     @ArraySchema(schema =
                     @Schema(implementation = Ingredient.class)))
@@ -143,5 +145,49 @@ public class IngredientController {
     public ResponseEntity<Void> getAllIngredients() {
         ingredientService.getAllIngredients();
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/downloadIngredient")
+    @Operation(summary = "Скачивание файла со списком ингредиентов в формате txt")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Запрос выполнился", content = {
+                    @Content(mediaType = "application/json", array =
+                    @ArraySchema(schema =
+                    @Schema(implementation = Ingredient.class)))
+            }
+            ),
+            @ApiResponse(responseCode = "400", description = "Ошибка в параметрах запроса", content = {
+                    @Content(mediaType = "application/json", array =
+                    @ArraySchema(schema =
+                    @Schema(implementation = Ingredient.class)))
+            }
+            ),
+            @ApiResponse(responseCode = "404", description = "URL неверный или такого действия нет в веб-приложении",
+                    content = {
+                            @Content(mediaType = "application/json", array =
+                            @ArraySchema(schema =
+                            @Schema(implementation = Ingredient.class)))
+                    }
+            ),
+            @ApiResponse(responseCode = "500", description = "Ошибка на сервере",
+                    content = {
+                            @Content(mediaType = "application/json", array =
+                            @ArraySchema(schema =
+                            @Schema(implementation = Ingredient.class)))
+                    }
+            )
+    }
+    )
+    public ResponseEntity<byte[]> downloadDataFileIngredient() {
+        byte[] data = ingredientService.downloadDataFileIngredient();
+        if (data == null) {
+            return ResponseEntity.badRequest().build();
+        } else {
+            return ResponseEntity.ok()
+                    .contentLength(data.length)
+                    .contentType(MediaType.TEXT_PLAIN)
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"IngredientLog.txt\"")
+                    .body(data);
+        }
     }
 }

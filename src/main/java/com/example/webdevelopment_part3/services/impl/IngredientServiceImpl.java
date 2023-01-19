@@ -6,9 +6,11 @@ import com.example.webdevelopment_part3.services.IngredientService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -59,6 +61,15 @@ public class IngredientServiceImpl implements IngredientService {
         for (Map.Entry<Integer, Ingredient> entry : ingredients.entrySet()) {
             System.out.printf("%s=>%s\n", entry.getKey(), entry.getValue());
         }
+    }
+    @Nullable
+    @Override
+    public byte[] downloadDataFileIngredient() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for(Ingredient ingredient: ingredients.values()) {
+            stringBuilder.append(ingredient).append("\n").append(" ").append("\n");
+        }
+        return stringBuilder.toString().getBytes(StandardCharsets.UTF_8);
     }
 
     private void saveToFileIngredient() {

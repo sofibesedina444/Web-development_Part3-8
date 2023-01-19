@@ -10,12 +10,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/recipe")
 @RestController
-@Tag(name = "Рецепт", description = "Операции CRUD")
+@Tag(name = "Рецепт", description = "Операции CRUD и скачивание файла txt")
 public class RecipeController {
     private final RecipeService recipeService;
 
@@ -144,5 +146,49 @@ public class RecipeController {
     public ResponseEntity<Void> getAllRecipes() {
         recipeService.getAllRecipes();
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/downloadRecipe")
+    @Operation(summary = "Скачивание файла со списком рецептов в формате txt")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Запрос выполнился", content = {
+                    @Content(mediaType = "application/json", array =
+                    @ArraySchema(schema =
+                    @Schema(implementation = Ingredient.class)))
+            }
+            ),
+            @ApiResponse(responseCode = "400", description = "Ошибка в параметрах запроса", content = {
+                    @Content(mediaType = "application/json", array =
+                    @ArraySchema(schema =
+                    @Schema(implementation = Ingredient.class)))
+            }
+            ),
+            @ApiResponse(responseCode = "404", description = "URL неверный или такого действия нет в веб-приложении",
+                    content = {
+                            @Content(mediaType = "application/json", array =
+                            @ArraySchema(schema =
+                            @Schema(implementation = Ingredient.class)))
+                    }
+            ),
+            @ApiResponse(responseCode = "500", description = "Ошибка на сервере",
+                    content = {
+                            @Content(mediaType = "application/json", array =
+                            @ArraySchema(schema =
+                            @Schema(implementation = Ingredient.class)))
+                    }
+            )
+    }
+    )
+    public ResponseEntity<byte[]> downloadDataFileRecipe() {
+        byte[] data = recipeService.downloadDataFileRecipe();
+        if (data == null) {
+            return ResponseEntity.badRequest().build();
+        } else {
+            return ResponseEntity.ok()
+                    .contentLength(data.length)
+                    .contentType(MediaType.TEXT_PLAIN)
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"RecipeLog.txt\"")
+                    .body(data);
+        }
     }
 }

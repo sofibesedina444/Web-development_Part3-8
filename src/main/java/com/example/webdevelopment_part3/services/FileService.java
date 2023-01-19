@@ -1,5 +1,4 @@
 package com.example.webdevelopment_part3.services;
-
 import java.io.File;
 
 public interface FileService {

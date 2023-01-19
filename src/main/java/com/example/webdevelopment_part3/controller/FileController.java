@@ -1,7 +1,13 @@
 package com.example.webdevelopment_part3.controller;
 
+import com.example.webdevelopment_part3.model.Ingredient;
 import com.example.webdevelopment_part3.services.FileService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.commons.io.IOUtils;
 import org.springframework.core.io.InputStreamResource;
@@ -25,12 +31,43 @@ public class FileController {
     }
 
     @GetMapping("/exportIngredient")
-    @Operation(summary = "Скачивание файла со списком ингредиентов")
-    public ResponseEntity<InputStreamResource> downloadDataFileIngredient() throws FileNotFoundException {
+    @Operation(summary = "Скачивание файла со списком ингредиентов в формате json")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Запрос выполнился", content = {
+                    @Content(mediaType = "application/json", array =
+                    @ArraySchema(schema =
+                    @Schema(implementation = Ingredient.class)))
+            }
+            ),
+            @ApiResponse(responseCode = "400", description = "Ошибка в параметрах запроса", content = {
+                    @Content(mediaType = "application/json", array =
+                    @ArraySchema(schema =
+                    @Schema(implementation = Ingredient.class)))
+            }
+            ),
+            @ApiResponse(responseCode = "404", description = "URL неверный или такого действия нет в веб-приложении",
+                    content = {
+                            @Content(mediaType = "application/json", array =
+                            @ArraySchema(schema =
+                            @Schema(implementation = Ingredient.class)))
+                    }
+            ),
+            @ApiResponse(responseCode = "500", description = "Ошибка на сервере",
+                    content = {
+                            @Content(mediaType = "application/json", array =
+                            @ArraySchema(schema =
+                            @Schema(implementation = Ingredient.class)))
+                    }
+            )
+    }
+    )
+    public ResponseEntity<InputStreamResource> exportDataFileIngredient() throws FileNotFoundException {
         File file = fileService.getDataFileIngredient();
         if (file.exists()) {
             InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
-            return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).contentLength(file.length())
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .contentLength(file.length())
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"IngredientLog.json\"")
                     .body(resource);
         } else {
@@ -40,7 +77,36 @@ public class FileController {
 
     @PutMapping(value = "/importIngredient", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Обновление файла со списком ингредиентов")
-    public ResponseEntity<Void> uploadDataFileIngredient(@RequestParam MultipartFile multipartFile) {
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Запрос выполнился", content = {
+                    @Content(mediaType = "application/json", array =
+                    @ArraySchema(schema =
+                    @Schema(implementation = Ingredient.class)))
+            }
+            ),
+            @ApiResponse(responseCode = "400", description = "Ошибка в параметрах запроса", content = {
+                    @Content(mediaType = "application/json", array =
+                    @ArraySchema(schema =
+                    @Schema(implementation = Ingredient.class)))
+            }
+            ),
+            @ApiResponse(responseCode = "404", description = "URL неверный или такого действия нет в веб-приложении",
+                    content = {
+                    @Content(mediaType = "application/json", array =
+                    @ArraySchema(schema =
+                    @Schema(implementation = Ingredient.class)))
+            }
+            ),
+            @ApiResponse(responseCode = "500", description = "Ошибка на сервере",
+                    content = {
+                            @Content(mediaType = "application/json", array =
+                            @ArraySchema(schema =
+                            @Schema(implementation = Ingredient.class)))
+                    }
+            )
+    }
+    )
+    public ResponseEntity<Void> importDataFileIngredient(@RequestParam MultipartFile multipartFile) {
         fileService.clearDataFileIngredient();
         File file = fileService.getDataFileIngredient();
         try (FileOutputStream fileOutputStream = new FileOutputStream(file)) {
@@ -54,7 +120,36 @@ public class FileController {
 
     @GetMapping("/exportRecipe")
     @Operation(summary = "Скачивание файла со списком рецептов")
-    public ResponseEntity<InputStreamResource> downloadDataFileRecipe() throws FileNotFoundException {
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Запрос выполнился", content = {
+                    @Content(mediaType = "application/json", array =
+                    @ArraySchema(schema =
+                    @Schema(implementation = Ingredient.class)))
+            }
+            ),
+            @ApiResponse(responseCode = "400", description = "Ошибка в параметрах запроса", content = {
+                    @Content(mediaType = "application/json", array =
+                    @ArraySchema(schema =
+                    @Schema(implementation = Ingredient.class)))
+            }
+            ),
+            @ApiResponse(responseCode = "404", description = "URL неверный или такого действия нет в веб-приложении",
+                    content = {
+                            @Content(mediaType = "application/json", array =
+                            @ArraySchema(schema =
+                            @Schema(implementation = Ingredient.class)))
+                    }
+            ),
+            @ApiResponse(responseCode = "500", description = "Ошибка на сервере",
+                    content = {
+                            @Content(mediaType = "application/json", array =
+                            @ArraySchema(schema =
+                            @Schema(implementation = Ingredient.class)))
+                    }
+            )
+    }
+    )
+    public ResponseEntity<InputStreamResource> exportDataFileRecipe() throws FileNotFoundException {
         File file = fileService.getDataFileRecipe();
         if (file.exists()) {
             InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
@@ -68,7 +163,36 @@ public class FileController {
 
     @PutMapping(value = "/importRecipe", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Обновление файла со списком рецептов")
-    public ResponseEntity<Void> uploadDataFileRecipe(@RequestParam MultipartFile multipartFile) {
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Запрос выполнился", content = {
+                    @Content(mediaType = "application/json", array =
+                    @ArraySchema(schema =
+                    @Schema(implementation = Ingredient.class)))
+            }
+            ),
+            @ApiResponse(responseCode = "400", description = "Ошибка в параметрах запроса", content = {
+                    @Content(mediaType = "application/json", array =
+                    @ArraySchema(schema =
+                    @Schema(implementation = Ingredient.class)))
+            }
+            ),
+            @ApiResponse(responseCode = "404", description = "URL неверный или такого действия нет в веб-приложении",
+                    content = {
+                            @Content(mediaType = "application/json", array =
+                            @ArraySchema(schema =
+                            @Schema(implementation = Ingredient.class)))
+                    }
+            ),
+            @ApiResponse(responseCode = "500", description = "Ошибка на сервере",
+                    content = {
+                            @Content(mediaType = "application/json", array =
+                            @ArraySchema(schema =
+                            @Schema(implementation = Ingredient.class)))
+                    }
+            )
+    }
+    )
+    public ResponseEntity<Void> importDataFileRecipe(@RequestParam MultipartFile multipartFile) {
         fileService.clearDataFileRecipe();
         File file = fileService.getDataFileRecipe();
         try (FileOutputStream fileOutputStream = new FileOutputStream(file)) {

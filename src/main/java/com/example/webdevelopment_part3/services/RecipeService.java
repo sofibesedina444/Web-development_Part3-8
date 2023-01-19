@@ -1,8 +1,5 @@
 package com.example.webdevelopment_part3.services;
-
 import com.example.webdevelopment_part3.model.Recipe;
-
-import java.util.Map;
 
 public interface RecipeService {
     Integer addRecipe(Recipe recipe);
@@ -14,4 +11,6 @@ public interface RecipeService {
     Recipe getRecipe(int id);
 
     void getAllRecipes();
+
+    byte[] downloadDataFileRecipe();
 }

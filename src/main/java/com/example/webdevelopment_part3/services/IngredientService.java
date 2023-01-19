@@ -11,4 +11,6 @@ public interface IngredientService {
     Ingredient getIngredient (int id);
 
     void getAllIngredients();
+
+    byte[] downloadDataFileIngredient();
 }
